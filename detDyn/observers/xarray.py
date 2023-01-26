@@ -1,5 +1,6 @@
 from .base import Observer
 from tqdm import tqdm
+import xarray as xr
 
 
 class XarrayObserver(Observer):
@@ -7,7 +8,7 @@ class XarrayObserver(Observer):
     Child classes should be equipped with a method called 'observations'
     that unpacks the ._observations list into xr."""
 
-    def __init__(self, integrator, name=""):
+    def __init__(self, integrator):
         """param, integrator: integrator being observed."""
 
         # Needed knowledge of the integrator
@@ -61,8 +62,9 @@ class TrajectoryObserver(XarrayObserver):
 
 class ScalarObserver(XarrayObserver):
     def __init__(self, integrator, scalar_function, name: str):
+        super().__init__(integrator)
         self.name = name
-        self.scalar_function
+        self.scalar_function = scalar_function
 
     def look(self, integrator):
         """Observes scalar valur of trajectory"""
@@ -83,10 +85,11 @@ class ScalarObserver(XarrayObserver):
 
         dic = {}
         _time = self._time_obs
-        dic[self.name] = xr.DataArray(
+        xr_da = xr.DataArray(
             self._observations,
             dims=["time"],
             name=self.name,
             coords={"time": _time},
+            attrs=self.parameters,
         )
-        return xr.Dataset(dic, attrs=self.parameters)
+        return xr_da
