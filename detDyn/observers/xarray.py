@@ -57,3 +57,36 @@ class TrajectoryObserver(XarrayObserver):
         # Making Observations
         self._observations.append(integrator.state.copy())
         return
+
+
+class ScalarObserver(XarrayObserver):
+    def __init__(self, integrator, scalar_function, name: str):
+        self.name = name
+        self.scalar_function
+
+    def look(self, integrator):
+        """Observes scalar valur of trajectory"""
+
+        # Note the time
+        self._time_obs.append(integrator.time)
+
+        # Making Observations
+        self._observations.append(self.scalar_function(integrator.state.copy()))
+        return
+
+    @property
+    def observations(self):
+        """cupboard: Directory where to write netcdf."""
+        if len(self._observations) == 0:
+            print("I have no observations! :(")
+            return
+
+        dic = {}
+        _time = self._time_obs
+        dic[self.name] = xr.DataArray(
+            self._observations,
+            dims=["time"],
+            name=self.name,
+            coords={"time": _time},
+        )
+        return xr.Dataset(dic, attrs=self.parameters)
