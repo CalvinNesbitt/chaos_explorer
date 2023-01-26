@@ -10,7 +10,7 @@ def bisect(x, y):
     return x + 0.5 * (y - x)
 
 
-class mStateAlgorithm:
+class bisectionAlgorithm:
     """
     Calculates the melancholia state of a bistable dynamical system.
 
@@ -18,7 +18,7 @@ class mStateAlgorithm:
     ------------
     integrator, object
         Something that runs the dynamical system.
-        Needs to have set_state, state and integrate functions.
+        Needs to have set_state, state and run functions.
 
     check_cold, function
         Function that tests whether a point is in the 'cold' basin.
@@ -71,12 +71,12 @@ class mStateAlgorithm:
         "One step on M-state algorithm"
 
         # Integate cold and hot points one step forward
-        self.integrator.set_state(self.cold_point)
-        self.integrator.integrate(self.tau)
+        self.integrator.state = self.cold_point
+        self.integrator.run(self.tau)
         self.cold_point = self.integrator.state
 
-        self.integrator.set_state(self.hot_point)
-        self.integrator.integrate(self.tau)
+        self.integrator.state = self.hot_point
+        self.integrator.run(self.tau)
         self.hot_point = self.integrator.state
 
         # Midpoint update
@@ -98,10 +98,10 @@ class mStateAlgorithm:
 #     """
 
 #     integrator.set_state(ic)
-#     tau = 0.1 # How long we integrate between checks, will effect how efficient we are
+#     tau = 0.1 # How long we run between checks, will effect how efficient we are
 
 #     for i in range(1000): # How many checks we make
-#         integrator.integrate(tau)
+#         integrator.run(tau)
 #         if integrator.state[0] < -0.5: #Threshold for being cold, ensure cold ic matches this
 #             return True
 #         elif integrator.state[0] > 0.5: #Threshold for being hot
