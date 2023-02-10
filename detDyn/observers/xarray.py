@@ -93,3 +93,24 @@ class ScalarObserver(XarrayObserver):
             attrs=self.parameters,
         )
         return xr_da
+
+
+class MstateObserver(XarrayObserver):
+    "Observes and Mstate computation."
+
+    def make_observations(self, number, timer=True):
+        self.look(self.integrator)  # Initial observation
+        for x in tqdm(range(number), disable=not timer):
+            self.integrator.run(1)  # run here is # of mstate alg steps rather than length of time
+            self.look(self.integrator)
+        return
+
+    def look(self, mstate_alg):
+        """Observes"""
+
+        # Note the time
+        self._time_obs.append(mstate_alg.time)
+
+        # Making Observations
+        self._observations.append(mstate_alg.midpoint.copy())
+        return

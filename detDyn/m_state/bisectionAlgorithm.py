@@ -10,7 +10,7 @@ def bisect(x, y):
     return x + 0.5 * (y - x)
 
 
-class bisectionAlgorithm:
+class BisectionAlgorithm:
     """
     Calculates the melancholia state of a bistable dynamical system.
 
@@ -40,6 +40,7 @@ class bisectionAlgorithm:
     def __init__(self, integrator, check_cold, cool_down, heat_up, tau, ic):
 
         self.integrator = integrator
+        self.parameters = integrator.parameters
         self.check_cold = check_cold
         self.cool_down = cool_down
         self.heat_up = heat_up
