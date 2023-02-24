@@ -9,4 +9,6 @@ Package for doing standard deterministic dynamical system's analysis in python. 
 2. [ ] **Goal 1**: Add lyapunov computation functionality
     1. [ ] Lyapunov spectrum & CLVs when tlm provided.
     2. [ ] Jax for auto-generation of tlm.
-3. [ ] **Phase 2**: Add discrete dynamics
+3. [ ] **Goal 2**: Add discrete dynamics
+3. [ ] **Goal 3**: Add stochastic dynamics
+
