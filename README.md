@@ -1,8 +1,6 @@
 # detDyn
 Package for doing standard deterministic dynamical system's analysis in python. Inpsired by [DynamicalSystems.jl](https://github.com/JuliaDynamics/DynamicalSystems.jl)
 
-Inspired in part by https://github.com/JuliaDynamics/DynamicalSystems.jl.
-
 ## Roadmap
 
 1. [ ] **Goal 0**: Have basic integrator/observer system setup.
