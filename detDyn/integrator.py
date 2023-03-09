@@ -20,6 +20,7 @@ class OdeIntegrator:
         self.parameters = parameters
         self.time = 0
         self.method = method
+        self.ndim = len(ic)
 
     def _rhs_dt(self, t, state):
         return self.rhs(state, **self.parameters)
