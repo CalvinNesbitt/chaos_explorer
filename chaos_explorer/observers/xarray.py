@@ -50,13 +50,25 @@ class XarrayObserver(Observer):
 
 class TrajectoryObserver(XarrayObserver):
     def look(self, integrator):
-        """Observes trajectory of a integrator trajectory"""
+        """Observes trajectory of a integrator"""
 
         # Note the time
         self._time_obs.append(integrator.time)
 
         # Making Observations
         self._observations.append(integrator.state.copy())
+        return
+
+
+class TangentTrajectoryObserver(XarrayObserver):
+    def look(self, tangent_integrator):
+        """Observes trajectory of a tangent integrator"""
+
+        # Note the time
+        self._time_obs.append(tangent_integrator.time)
+
+        # Making Observations
+        self._observations.append(tangent_integrator._trajectory_state.copy())
         return
 
 
