@@ -1,4 +1,4 @@
-# chaso_explorer
+# chaos_explorer
 Package for doing standard deterministic dynamical system's analysis in python. Inpsired by [DynamicalSystems.jl](https://github.com/JuliaDynamics/DynamicalSystems.jl)
 
 ## Roadmap
