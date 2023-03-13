@@ -5,8 +5,7 @@ from .core import BennetinIntegrator
 import numpy as np
 
 
-def compute_blvs(rhs, jacobian, number_of_observations, ic, tau=0.01, transient_len=1000):
-
+def compute_blvs(rhs, jacobian, number_of_observations, ic, tau=0.1, transient_len=1000):
     bennetin_stepper = BennetinIntegrator(rhs, ic, jacobian, np.eye(3) * 1.0e-6, tau=tau)
 
     # Run Transient
@@ -19,7 +18,6 @@ def compute_blvs(rhs, jacobian, number_of_observations, ic, tau=0.01, transient_
     trajectory_ts = []
 
     for step in range(int(number_of_observations)):
-
         # Do Bennetin Steps
         bennetin_stepper.step()
 
