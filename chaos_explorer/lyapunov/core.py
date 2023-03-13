@@ -1,6 +1,8 @@
 import numpy as np
 import xarray as xr
 from tqdm import tqdm
+from loguru import logger
+import sys
 
 from chaos_explorer.tangent_integrator import TangentIntegrator
 
@@ -48,8 +50,12 @@ class BennetinStepper(TangentIntegrator):
             self.step()
 
 
+logger.remove()
+logger.add(sys.stdout, colorize=False, format="{time:YYYYMMDDHHmmss}|{level}|{message}")
+
+
 class BennetinObserver:
-    def __init__(self, bennetin_stepper):
+    def __init__(self, bennetin_stepper, quiet=False):
         self.bennetin_stepper = bennetin_stepper
         self._time_obs = []
         self.dump_count = 0
@@ -58,6 +64,7 @@ class BennetinObserver:
         self._trajectory_observations = []
         self.store_Q = True
         self.store_R = True
+        self.quiet = quiet
 
     def make_observations(self, number, timer=True):
         self.look(self.bennetin_stepper)  # Initial observation
@@ -76,10 +83,11 @@ class BennetinObserver:
                 self.look(self.bennetin_stepper)
             self.dump(save_folder / f"{block}.nc")
 
-        for i in range(remainder):
-            self.bennetin_stepper.step()
-            self.look(self.bennetin_stepper)
-        self.dump(save_folder / f"{block + 1}.nc")
+        if remainder != 0:
+            for i in range(remainder):
+                self.bennetin_stepper.step()
+                self.look(self.bennetin_stepper)
+            self.dump(save_folder / f"{block + 1}.nc")
         return
 
     def look(self, bennetin_stepper):
@@ -142,23 +150,22 @@ class BennetinObserver:
             return
 
         self.observations.to_netcdf(save_name)
-        print(f"Observations written to {save_name}. Erasing personal log.\n")
+        if not self.quiet:
+            logger.info(f"Observations written to {save_name}. Erasing personal log.\n")
         self.wipe()
         self.dump_count += 1
         return
 
 
-def clv_convergence_step(R, A):
-    newA = np.linalg.solve(R, A)  # Push A with R^-1
-    norms = np.linalg.norm(newA, axis=0, ord=2)  # Prevent vector growth
-    return newA / norms
+# def clv_convergence_step(R, A):
+#     newA = np.linalg.solve(R, A)  # Push A with R^-1
+#     norms = np.linalg.norm(newA, axis=0, ord=2)  # Prevent vector growth
+#     return newA / norms
 
 
-def many_clv_convergence_steps(R_ts, A):
-    A_ts = []
-    for R in R_ts:
-        A_ts.append(A)
-        A = clv_convergence_step(R, A)
-    return A_ts
-
-def clv_computation_step(R, Q, A):
+# def many_clv_convergence_steps(R_ts, A):
+#     A_ts = []
+#     for R in R_ts:
+#         A_ts.append(A)
+#         A = clv_convergence_step(R, A)
+#     return A_ts
