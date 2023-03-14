@@ -3,10 +3,15 @@
 from .core import BennetinIntegrator
 
 import numpy as np
+from loguru import logger
+import sys
 
 
 def compute_blvs(rhs, jacobian, number_of_observations, ic, tau=0.1, transient_len=1000):
     bennetin_stepper = BennetinIntegrator(rhs, ic, jacobian, np.eye(3) * 1.0e-6, tau=tau)
+
+    logger.remove()
+    logger.add(sys.stdout, colorize=False, format="{time:YYYYMMDDHHmmss}|{level}|{message}")
 
     # Run Transient
     bennetin_stepper.many_steps(transient_len)
