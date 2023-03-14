@@ -3,7 +3,7 @@ Package for doing standard deterministic dynamical system's analysis in python. 
 
 ## Roadmap
 
-1. [] **Goal 0**: Have basic integrator/observer system setup.
+1. [ ] **Goal 0**: Have basic integrator/observer system setup.
     1. [x] Wrapped scipy integrators and coupled with observers.
     2. [ ] Create example notebooks for common workflows, including integration, observation and m-state computation.
     3. [ ] Documentation and unit tests.
